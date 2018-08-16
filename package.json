@@ -20,15 +20,17 @@
     "zone.js": "^0.8.26"
   },
   "devDependencies": {
+    "@angular-devkit/build-angular": "~0.7.0",
     "@types/node": "^10.5.8",
     "angular2-template-loader": "^0.6.2",
     "awesome-typescript-loader": "^5.0.0",
     "html-loader": "^0.5.1",
     "raw-loader": "^0.5.1",
-    "typescript": "^2.8.3",
+    "typescript": "~2.7.2",
     "uglifyjs-webpack-plugin": "^1.2.5",
     "webpack": "^4.16.5",
     "webpack-cli": "^2.1.2",
-    "webpack-dev-server": "^3.1.5"
+    "webpack-dev-server": "^3.1.5",
+    "@angular/compiler-cli": "^6.1.0"
   }
 }

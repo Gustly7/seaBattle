@@ -1,19 +1,18 @@
-import {Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
 
 @Component({
     selector: 'cell',
     template: `
-        <div class="cell">{{text}}</div>`,
+        <div class="cell" (click)="cellClick()">{{text}}</div>`,
     styles: [`
-        .cell:hover {
-            background-color: rgba(170, 187, 204, 0.5);
+        .cell2:nth-child(2n):hover {
+            background-color: rgba(0, 183, 20, 0.8);
         }
 
         .cell {
             width: 20px;
             height: 20px;
-            background-color: #00c00d;
-            border: 1px;
+            border-width: 0px 1px 1px 0px;
             border-color: black;
             border-style: solid;
             text-align: center;
@@ -21,5 +20,11 @@ import {Component} from '@angular/core';
     `]
 })
 export class cell {
-    text: string;
+    @Input() text: string;
+    @Input() x: number;
+    @Input() y: number;
+
+    cellClick() {
+        alert(this.x + '$' + this.y);
+    }
 }

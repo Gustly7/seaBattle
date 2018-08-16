@@ -1,32 +1,69 @@
-import {Component} from '@angular/core';
+import {Component, ElementRef} from '@angular/core';
 
 @Component({
     selector: 'my-app',
     template: `
-        <div class="fieldRow" *ngFor="let col of field; let i = index">
-            <cell *ngFor="let row of field[i]" (text)=row></cell>
+        <div class="field">
+            <div class="bg"></div>
+            <div class="fieldRow" *ngFor="let col of field; let y = index">
+                <cell *ngFor="let row of field[y]; let x = index" text={{row}} x={{x}} y={{y}}></cell>
+            </div>
         </div>`,
     styles: [`
+        
+        
         div.fieldRow {
             display: flex;
+        }
+
+        div.fieldRow:nth-child(1) {
+            background-color: white;
+        }
+
+        div.bg {
+            background-image: url("./assets/field-bg.jpg");
+            background-size: contain;
+            width: 200px;
+            height: 200px;
+            top: 20px;
+            left: 20px;
+            position: absolute;
+            -webkit-animation: slide 80s linear infinite;
+            opacity: 0.5;
+            z-index: -1;
+        }
+
+        div.fieldRow cell:nth-child(1) {
+            background-color: white;
+        }
+
+        @-webkit-keyframes slide {
+            from {
+                background-position: 0 0;
+            }
+            to {
+                background-position: -200px -200px;
+            }
         }
     `]
 })
 export class field {
-    width: number = 10;
-    height: number = 10;
-    //rows = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    width: number;
+    height: number;
     field: string[][] = [[]];
 
+    constructor(public elementRef: ElementRef) {
+    }
+
     ngOnInit() {
-        console.log('width=' + this.width);
-        console.log('heigth=' + this.height);
-        console.log(this.field);
+        this.width = 1 + +this.elementRef.nativeElement.getAttribute('field-width');
+        this.height = 1 + +this.elementRef.nativeElement.getAttribute('field-height');
         for (let i = 0, row = []; i < this.width; i++) {
-            console.log('test01');
             for (let j = 0; j < this.height; j++) {
-                if (i == 0)
-                    row.push(String.fromCharCode(1040 + j));
+                if (i == 0 && j > 0)
+                    row.push(String.fromCharCode(1040 + j - 1 > 1048 ? 1040 + j : 1040 + j - 1));
+                else if (i > 0 && j == 0)
+                    row.push(i);
                 else
                     row.push('');
             }
@@ -34,9 +71,5 @@ export class field {
             row = [];
         }
         this.field.shift();
-        //window.q = this.field;
-        console.log(window);
-        console.log(field);
-        console.log(this.field);
     }
 }
