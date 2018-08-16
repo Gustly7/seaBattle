@@ -1,0 +1,4 @@
+/* You can add global styles to this file, and also import other style files */
+.cell:nth-child(n):hover {
+    background-color: rgba(0, 183, 20, 0.8);
+}
