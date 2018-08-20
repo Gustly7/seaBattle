@@ -1,4 +1,26 @@
 /* You can add global styles to this file, and also import other style files */
-.cell:nth-child(n):hover {
+
+div.fieldRow:nth-child(2) cell{
+    background-color: white;
+}
+
+div.fieldRow cell:first-child{
+    background-color: white;
+}
+
+div.fieldRow cell:hover {
     background-color: rgba(0, 183, 20, 0.8);
+    cursor: pointer;
+}
+
+div.fieldRow:nth-child(2) cell:hover,div.fieldRow cell:first-child:hover{
+    background-color: white;
+    cursor:default;
+}
+
+div::selection {
+    background: transparent;
+}
+div::-moz-selection {
+    background: transparent;
 }
