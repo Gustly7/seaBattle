@@ -1,0 +1,22 @@
+<!--
+Не смог победить, метод получения размера полей используется уже при отрисовке приложения
+То есть свой init не спасет, а остановить отрисовку умею только через *ngIf
+-->
+<div *ngIf="this.GameService.isReady" class="container">
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <button *ngIf="!this.GameService.isStarted" class="btn btn-primary" type="button" (click)="startGame()">Start</button>
+            <div *ngIf="this.GameService.isStarted" id="screen">{{this.GameService.screenText}}</div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-5">
+            <player></player>
+        </div>
+        <div class="col-lg-2">
+        </div>
+        <div class="col-lg-5">
+            <player [isComp]="true" [isEnemy]="true"></player>
+        </div>
+    </div>
+</div>

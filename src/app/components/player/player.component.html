@@ -1,0 +1,39 @@
+<div class="row">
+    <div class="col-lg-12">
+        &nbsp;
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-11">
+        <field [width]="this.GameService.getFieldSize() + 1" [height]="this.GameService.getFieldSize() + 1" [ships]="ships" [selectedShip]="selectedShip" (fieldCellClickOut)="playerFieldCellClick($event)" [isEnemy]="isEnemy"></field>
+    </div>
+    <!--Селект лист с кораблями для игрока для ручной расстановки-->
+    <div class="col-lg-1" *ngIf="!isEnemy&&!this.GameService.isStarted">
+        <select size="10" id="playersShips" [(ngModel)]="selectedShip">
+            <ng-container *ngFor="let vShip of ships">
+                <option *ngIf="vShip.x==-999" [ngValue]="vShip">{{vShip.name}}</option>
+            </ng-container>
+        </select>
+        <button type="button" (click)="placeShipRandom()">Random</button>
+    </div>
+    <!--Селект лист с кораблями после начала игры-->
+    <div class="col-lg-1" *ngIf="this.GameService.isStarted">
+        <select size="10" disabled>
+            <ng-container *ngFor="let vShip of ships">
+                <option *ngIf="vShip.isAlive">{{vShip.name}}</option>
+            </ng-container>
+        </select>
+    </div>
+    <!--Селект лист со сложностями для копьютера-->
+    <div class="col-lg-1" *ngIf="isComp&&isEnemy">
+        <select size="1" [(ngModel)]="selectedDifficulty">
+            <ng-container *ngFor="let vDiff of difficulties">
+                <!--Вот тут не понял как правильно опцию сделать, было value={{vDiff.id}}, но не работало
+                , value обрамлялся скобками и возвращал строку
+                А вот в таком виде работает
+                -->
+                <option [ngValue]="vDiff.id" title="{{vDiff.discr}}">{{vDiff.name}}</option>
+            </ng-container>
+        </select>
+    </div>
+</div>

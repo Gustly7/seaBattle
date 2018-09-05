@@ -1,0 +1,55 @@
+div.field {
+    position: relative;
+}
+
+div.fieldRow {
+    display: flex;
+}
+
+div.bg {
+    background-size: contain;
+    width: 400px;
+    height: 400px;
+    top: 40px;
+    left: 40px;
+    position: absolute;
+    overflow: hidden;
+    z-index: -1;
+}
+
+div.bg:before {
+    background-image: url("../../../assets/field-bg.jpg");
+    opacity: 0.6;
+    z-index: -1;
+    -webkit-animation: slide 300s linear infinite;
+    content: "";
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    top: -50%;
+    left: -50%;
+    z-index: -1;
+}
+
+@-webkit-keyframes slide {
+    0% {
+        background-position: 0px 0px;
+        transform: rotate(0deg);
+    }
+    25% {
+        background-position: 600px 600px;
+        transform: rotate(90deg);
+    }
+    50% {
+        background-position: 1200px 1200px;
+        transform: rotate(180deg);
+    }
+    75% {
+        background-position: 600px 600px;
+        transform: rotate(270deg);
+    }
+    100% {
+        background-position: 0px 0px;
+        transform: rotate(360deg);
+    }
+}

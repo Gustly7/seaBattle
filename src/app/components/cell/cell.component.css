@@ -1,0 +1,18 @@
+.cell {
+    width: 40px;
+    height: 40px;
+    border-width: 0px 1px 1px 0px;
+    border-color: black;
+    border-style: solid;
+    text-align: center;
+    position: relative;
+    font-size: 20pt;
+}
+.isShot{
+    background-color: yellow;
+    opacity: 0.5;
+}
+.isShot.isShip{
+    background-color: red;
+    opacity: 0.5;
+}
