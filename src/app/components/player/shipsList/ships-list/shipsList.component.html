@@ -1,0 +1,8 @@
+<div class="col-lg-1" *ngIf="!player.isEnemy&&!this.GameService.isStarted">
+  <select size="10" id="playersShips" [(ngModel)]="selectedShip">
+    <ng-container *ngFor="let vShip of player.ships">
+      <option *ngIf="vShip.x==-999" [ngValue]="vShip">{{vShip.name}}</option>
+    </ng-container>
+  </select>
+
+</div>

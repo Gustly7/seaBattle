@@ -11,10 +11,11 @@ import {PlayerComponent} from './components/player/player.component';
 import {GameService} from "./services/game.service";
 import {SettingsService} from "./services/settings.service";
 import {HttpClientModule} from "@angular/common/http";
+import { ShipsListComponent } from './components/player/shipsList/ships-list/shipsList.component';
 
 @NgModule({
     imports: [BrowserModule, FormsModule, HttpClientModule],
-    declarations: [game, cell, field, ship, shipPart, PlayerComponent],
+    declarations: [game, cell, field, ship, shipPart, PlayerComponent, ShipsListComponent],
     bootstrap: [game],
     providers: [ShipsService, GameService, SettingsService]
 })

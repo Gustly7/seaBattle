@@ -4,8 +4,8 @@
         <cell *ngFor="let vCell of field[y]; let x = index" [text]="vCell.text" [x]="x" [y]="y" [ship]="vCell.ship"
               [isShip]="vCell.isShip" [isShot]="vCell.isShot" (cellClickOut)="fieldCellClick($event)"></cell>
     </div>
-    <ng-container *ngIf="!isEnemy">
-        <ship *ngFor="let ship of ships" [x]="ship.x" [y]="ship.y" [parts]="ship.parts"
+    <ng-container *ngIf="!player.isEnemy">
+        <ship *ngFor="let ship of player.ships" [x]="ship.x" [y]="ship.y" [parts]="ship.parts"
               (dblclick)=shipDblClk(ship) [HP]="ship.HP"></ship>
     </ng-container>
     <button (click)="qwe()"></button>

@@ -5,6 +5,9 @@ import {ship} from "../ship/ship";
 import {cell} from "../cell/cell";
 import {coordinate} from "../../classes/coordinate";
 import {CompLogicService} from "../../services/comp-logic.service";
+import {Player} from "../../interfaces/player";
+import {PlayerService} from "../../services/player.service";
+import {FieldService} from "../../services/field.service";
 
 @Component({
     selector: 'player',
@@ -13,28 +16,29 @@ import {CompLogicService} from "../../services/comp-logic.service";
 })
 export class PlayerComponent implements OnInit {
 
-    ships: ship[] = []; //Массив кораблей
+    @Input() player: Player;
+    //ships: ship[] = []; //Массив кораблей
     selectedShip: ship; //Выбранный корабль из селект листа для ручной расстановки
-    @Input() isComp: boolean = false; //Флаг что игрок - комрьютер
-    @Input() isEnemy: boolean = false;//Флаг что игрок - враг
+    //@Input() isComp: boolean = false; //Флаг что игрок - комрьютер
+    //@Input() isEnemy: boolean = false;//Флаг что игрок - враг
 
     difficulties: object[] = this.GameService.getDifficulties(); //Массив сложностей для селект листа для копьютера
     selectedDifficulty: number = this.GameService.settings.difficulty; //Выбранная сложность, используется в CompLogicService для расчета координаты выстрела компьютера
 
-    constructor(private GameService: GameService, private ShipsService: ShipsService, private CompLogicService: CompLogicService) {
+    constructor(private GameService: GameService, private ShipsService: ShipsService, private CompLogicService: CompLogicService, private PlayerService: PlayerService, private FieldService: FieldService) {
     }
 
     ngOnInit() {
         //Вставляем в массив изначальные корабли.
-        this.ships = this.ShipsService.getInitShips();
+        this.player.ships = this.ShipsService.getInitShips();
 
         //Кладем в сервис ссылки на игроков, для игрока 2 рандомно расставляем корабли
-        if (this.isEnemy) {
-            this.GameService.player2 = this;
-            this.ShipsService.placeShipsRandom(this.ships);
+        if (this.player.isEnemy) {
+            this.PlayerService.player2 = this;
+            this.ShipsService.placeShipsRandom(this.player.ships);
         }
         else {
-            this.GameService.player1 = this;
+            this.PlayerService.player1 = this;
         }
     }
 
@@ -42,14 +46,14 @@ export class PlayerComponent implements OnInit {
     playerFieldCellClick(pCell: cell) {
 
         //Если клик по вражескому полю то стреляем
-        if (this.isEnemy) {
+        if (this.player.isEnemy) {
             //Только если игра началась и ячейка не подстреленная
             if (this.GameService.gameStarted() && pCell.isShot == false) {
 
                 let vCoordinate: coordinate = new coordinate();
                 vCoordinate.x = pCell.x;
                 vCoordinate.y = pCell.y;
-                if (this.GameService.fire(this.GameService.field2, vCoordinate)) {
+                if (this.GameService.fire(this.FieldService.field2, vCoordinate)) {
                     //Если человек попал в корабль, ничего не делаем
                 }
                 //Иначе стреляет компьютер
@@ -57,7 +61,7 @@ export class PlayerComponent implements OnInit {
                     while (true) {
                         vCoordinate = this.CompLogicService.getCompCoordinates(this.selectedDifficulty);
                         //Если промахнулись, выходим
-                        if (!this.GameService.fire(this.GameService.field1, vCoordinate)) {
+                        if (!this.GameService.fire(this.FieldService.field1, vCoordinate)) {
                             break;
                         }
                     }
@@ -85,7 +89,7 @@ export class PlayerComponent implements OnInit {
         this.selectedShip.x = pCell.x;
         this.selectedShip.y = pCell.y;
         this.selectedShip.rearrangeParts();
-        if (this.ShipsService.checkCollision(this.ships, this.selectedShip)) {
+        if (this.ShipsService.checkCollision(this.player.ships, this.selectedShip)) {
             this.selectedShip.x = oldX;
             this.selectedShip.y = oldY;
             this.selectedShip.rearrangeParts();
@@ -97,7 +101,7 @@ export class PlayerComponent implements OnInit {
 
     //Метод рандомной расстановки кораблей
     placeShipRandom() {
-        this.ShipsService.placeShipsRandom(this.ships);
+        this.ShipsService.placeShipsRandom(this.player.ships);
     }
 
 }

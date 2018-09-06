@@ -3,6 +3,8 @@ import {ship} from "../ship/ship";
 import {cell} from "../cell/cell";
 import {ShipsService} from "../../services/ships.service";
 import {GameService} from "../../services/game.service";
+import {FieldService} from "../../services/field.service";
+import {Player} from "../../interfaces/player";
 
 @Component({
     selector: 'field',
@@ -13,21 +15,20 @@ export class field {
     @Input() width: number;
     @Input() height: number;
     field: cell[][] = [[]];
-    @Input() ships: ship[] = [];
     @Output() fieldCellClickOut = new EventEmitter<cell>();
     @Input() selectedShip: ship;
-    @Input() isEnemy: boolean = false;
+    @Input() player: Player;
 
-    constructor(private GameService: GameService, private ShipsService: ShipsService) {
+    constructor(private GameService: GameService, private ShipsService: ShipsService, private FieldService: FieldService) {
 
     }
 
     ngOnInit() {
         //Кладем в сервис игры ссылки на поля
-        if (this.isEnemy)
-            this.GameService.field2 = this;
+        if (this.player.isEnemy)
+            this.FieldService.field2 = this;
         else
-            this.GameService.field1 = this;
+            this.FieldService.field1 = this;
 
         //Перебираем размер поля и заполняем атрибут field ячейками
         for (let i = 0, row: cell[] = []; i < this.width; i++) {
@@ -64,14 +65,11 @@ export class field {
         lShip.y = y;
         lShip.shipSize = 2;
         lShip.fillParts();
-        console.log('filled');
-        if (this.ShipsService.checkCollision(this.ships, lShip)) {
+        if (this.ShipsService.checkCollision(this.player.ships, lShip)) {
             alert('Коллизия');
             return false;
         }
-        this.ships.push(lShip);
-        console.log(lShip);
-        console.log('pushed');
+        this.player.ships.push(lShip);
         //console.log(this.ships);
     }
 
@@ -93,7 +91,7 @@ export class field {
         pShip.kx = pShip.kx == 0 ? 1 : 0;
         pShip.ky = pShip.kx == 0 ? 1 : 0;
         pShip.rearrangeParts();
-        if (this.ShipsService.checkCollision(this.ships, pShip)) {
+        if (this.ShipsService.checkCollision(this.player.ships, pShip)) {
             alert('коллизия');
             pShip.kx = pShip.kx == 0 ? 1 : 0;
             pShip.ky = pShip.kx == 0 ? 1 : 0;
@@ -104,14 +102,14 @@ export class field {
     //Метод начала игры. Перебирает все коробли поля и заполняет каждую ячейку поля значением isShip true если там корабль
     gameStart() {
 
-        for (let s in this.ships) {
+        for (let s in this.player.ships) {
 
-            let lShip = this.ships[s];
+            let lShip = this.player.ships[s];
             //Пропускаем корабли которые не поставили
             if (lShip.x == -999)
                 continue;
             for (let p in lShip.parts) {
-                let lPart = this.ships[s].parts[p];
+                let lPart = this.player.ships[s].parts[p];
                 let lCell = this.field[lPart.y][lPart.x];
                 //Кладем в ячейку флаг что это корабль
                 lCell.isShip = true;
@@ -122,6 +120,6 @@ export class field {
     }
 
     qwe(){
-        console.log(this.ships);
+        console.log(this.player.ships);
     }
 }

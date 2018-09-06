@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {coordinate} from "../classes/coordinate";
 import {GameService} from "./game.service";
 import {ship} from "../components/ship/ship";
+import {FieldService} from "./field.service";
 
 @Injectable({
     providedIn: 'root'
@@ -12,7 +13,7 @@ export class CompLogicService {
 
     shootMatrixAround: coordinate[] = []; //Массив координат для обстрела вокруг первого попадания по кораблю
 
-    constructor(private GameService: GameService) {
+    constructor(private GameService: GameService, private FieldService: FieldService) {
         //Расширяем временный корабль атрибутами первого удара и следующего ударов
         //Тайпскрипту это не нравится. Пришлось добавить атрибуты, но я не хотел ради одного места это делать.
         //Как поступить?
@@ -30,10 +31,10 @@ export class CompLogicService {
             //Простая сложность
             case 1:
                 while (true) {
-                    vCoordinate.x = this.GameService.getRandom(10);
-                    vCoordinate.y = this.GameService.getRandom(10);
+                    vCoordinate.x = this.GameService.getRandom(this.GameService.settings.fieldSize);
+                    vCoordinate.y = this.GameService.getRandom(this.GameService.settings.fieldSize);
                     //Перебираем координаты рандомом пока не найдем не подстреллянную
-                    if (!(this.GameService.field1.field[vCoordinate.y][vCoordinate.x].isShot)) {
+                    if (!(this.FieldService.field1.field[vCoordinate.y][vCoordinate.x].isShot)) {
                         return vCoordinate;
                     }
                 }
@@ -50,9 +51,9 @@ export class CompLogicService {
                 }
 
                 //Если попали в корабль
-                if (this.GameService.field1.field[vCoordinate.y][vCoordinate.x].isShip) {
+                if (this.FieldService.field1.field[vCoordinate.y][vCoordinate.x].isShip) {
                     //, то метим также ячейки расположенные рядом по диагонали
-                    this.GameService.markEmptyCells(this.GameService.field1.field[vCoordinate.y][vCoordinate.x]);
+                    this.GameService.markEmptyCells(this.FieldService.field1.field[vCoordinate.y][vCoordinate.x]);
 
                     //Если первого попадания не было, то пишем в него координаты
                     if (this.tempShip.firstHit.x == -1) {
@@ -76,7 +77,7 @@ export class CompLogicService {
                         let vC = new coordinate();
                         vC.x = vCoordinate.x - 1;
                         vC.y = vCoordinate.y;
-                        if (!this.GameService.field1.field[vC.y][vC.x].isShot) {
+                        if (!this.FieldService.field1.field[vC.y][vC.x].isShot) {
                             this.shootMatrixAround.push(vC);
                         }
                     }
@@ -84,7 +85,7 @@ export class CompLogicService {
                         let vC = new coordinate();
                         vC.x = vCoordinate.x + 1;
                         vC.y = vCoordinate.y;
-                        if (!this.GameService.field1.field[vC.y][vC.x].isShot) {
+                        if (!this.FieldService.field1.field[vC.y][vC.x].isShot) {
                             this.shootMatrixAround.push(vC);
                         }
                     }
@@ -93,7 +94,7 @@ export class CompLogicService {
                         let vC = new coordinate();
                         vC.x = vCoordinate.x;
                         vC.y = vCoordinate.y - 1;
-                        if (!this.GameService.field1.field[vC.y][vC.x].isShot) {
+                        if (!this.FieldService.field1.field[vC.y][vC.x].isShot) {
                             this.shootMatrixAround.push(vC);
                         }
                     }
@@ -101,7 +102,7 @@ export class CompLogicService {
                         let vC = new coordinate();
                         vC.x = vCoordinate.x;
                         vC.y = vCoordinate.y + 1;
-                        if (!this.GameService.field1.field[vC.y][vC.x].isShot) {
+                        if (!this.FieldService.field1.field[vC.y][vC.x].isShot) {
                             this.shootMatrixAround.push(vC);
                         }
                     }

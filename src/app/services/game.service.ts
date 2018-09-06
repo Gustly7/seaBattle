@@ -1,20 +1,17 @@
 import {Injectable} from '@angular/core';
-import {PlayerComponent} from './../components/player/player.component'
 import {field} from "../components/field/field";
 import {SettingsService} from "./settings.service";
 import {settings} from "../classes/settings";
 import {coordinate} from "../classes/coordinate";
 import {cell} from "../components/cell/cell";
+import {FieldService} from "./field.service";
+import {PlayerService} from "./player.service";
 
 @Injectable({
     providedIn: 'root'
 })
 export class GameService {
 
-    player1: PlayerComponent;    //Ссылка на 1 игрока
-    player2: PlayerComponent;    //Ссылка на 2 игрока
-    field1: field;               //Ссылка на поле 1 игрока
-    field2: field;               //Ссылка на поле 2 игрока
     isStarted: boolean = false;  //Флаг начала игры
     isFinished: boolean = false; //Флаг конца игры
     isReady: boolean = false;    //Флаг готовности отрисовки приложения. Ставится после скачивания настроек
@@ -30,7 +27,7 @@ export class GameService {
     }, {"name": 'Hard', "id": 3, "discr": "Как и normal, но стреляет разумно"}];
     screenText: string;
 
-    constructor(private SettingsService: SettingsService) {
+    constructor(private SettingsService: SettingsService, private FieldService: FieldService, private PlayerService: PlayerService) {
         this.SettingsService.getData().subscribe((data: any) => this.settings = data, null, () => {
             this.isReady = true;
         });
@@ -86,7 +83,7 @@ export class GameService {
         for (let i = -1; i < 2; i += 2) {
             for (let j = -1; j < 2; j += 2) {
                 if (pCell.x + i > 0 && pCell.x + i < 11 && pCell.y + j > 0 && pCell.y + j < 11) {
-                    this.field1.field[pCell.y + j][pCell.x + i].isShot = true;
+                    this.FieldService.field1.field[pCell.y + j][pCell.x + i].isShot = true;
                 }
             }
         }
@@ -99,20 +96,20 @@ export class GameService {
 
     //Метод проверки победителя
     checkWinner(): void {
-        for (let i: number = 0; i < this.player1.ships.length; i++) {
-            if (this.player1.ships[i].isAlive)
+        for (let i: number = 0; i < this.PlayerService.player1.player.ships.length; i++) {
+            if (this.PlayerService.player1.player.ships[i].isAlive)
                 break;
             //Если дошли до последнего корабля
-            if (i == this.player1.ships.length - 1) {
+            if (i == this.PlayerService.player1.player.ships.length - 1) {
                 this.showMessage('Выиграл компьютер');
                 this.isFinished = true;
             }
         }
-        for (let i: number = 0; i < this.player2.ships.length; i++) {
-            if (this.player2.ships[i].isAlive)
+        for (let i: number = 0; i < this.PlayerService.player2.player.ships.length; i++) {
+            if (this.PlayerService.player2.player.ships[i].isAlive)
                 break;
             //Если дошли до последнего корабля
-            if (i == this.player2.ships.length - 1) {
+            if (i == this.PlayerService.player2.player.ships.length - 1) {
                 this.showMessage('Выиграл игрок');
                 this.isFinished = true;
             }
