@@ -23,6 +23,7 @@ export class game {
 
     //Метод кнопки начала игры
     startGame() {
+        console.log(this);
         this.GameService.isStarted = true;
         this.FieldService.field1.gameStart();
         this.FieldService.field2.gameStart();

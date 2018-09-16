@@ -7,5 +7,5 @@ export class CompPlayer implements Player {
     field: field;
     isComp: boolean = true;
     isEnemy: boolean = true;
-
+    selectedShip: ship;
 }

@@ -1,6 +1,6 @@
 {
   "fieldSize": 10,
-  "difficulty": 2,
+  "difficulty": "normal",
   "ships": [
     {
       "size": 1,

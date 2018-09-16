@@ -11,6 +11,7 @@ import {ShipsService} from "../../../../services/ships.service";
 export class ShipsListComponent implements OnInit {
 
     @Input() player: Player;
+    @Input() dispCond: boolean;
 
     constructor(private GameService: GameService, private ShipsService: ShipsService) {
     }

@@ -18,13 +18,13 @@ export class GameService {
     settings: settings;          //Настройки, качаются из JSON
     difficulties: object[] = [{
         "name": 'Easy',
-        "id": 1,
+        "id": 'easy',
         "discr": "Компьютер всегда стреляет случайным образом"
     }, {
         "name": 'Normal',
-        "id": 2,
+        "id": 'normal',
         "discr": "Компьютер стреляет случайно, но пытается добить корабли и помечает клетки где кораблей быть не может"
-    }, {"name": 'Hard', "id": 3, "discr": "Как и normal, но стреляет разумно"}];
+    }, {"name": 'Hard', "id": 'hard', "discr": "Как и normal, но стреляет разумно"}];
     screenText: string;
 
     constructor(private SettingsService: SettingsService, private FieldService: FieldService, private PlayerService: PlayerService) {
@@ -61,11 +61,11 @@ export class GameService {
         //Если корабль
         if (vCell.isShip) {
             //Уменьшаем ХП на 1
-            vCell.ship.HP--;
+            vCell.ship.ship.HP--;
 
             //Если ХП 0 то убиваем корабль
-            if (vCell.ship.HP == 0) {
-                vCell.ship.isAlive = false;
+            if (vCell.ship.ship.HP == 0) {
+                vCell.ship.ship.isAlive = false;
                 this.showMessage('Убил');
             } else {
                 this.showMessage('Ранил');
@@ -97,7 +97,7 @@ export class GameService {
     //Метод проверки победителя
     checkWinner(): void {
         for (let i: number = 0; i < this.PlayerService.player1.player.ships.length; i++) {
-            if (this.PlayerService.player1.player.ships[i].isAlive)
+            if (this.PlayerService.player1.player.ships[i].ship.isAlive)
                 break;
             //Если дошли до последнего корабля
             if (i == this.PlayerService.player1.player.ships.length - 1) {
@@ -106,7 +106,7 @@ export class GameService {
             }
         }
         for (let i: number = 0; i < this.PlayerService.player2.player.ships.length; i++) {
-            if (this.PlayerService.player2.player.ships[i].isAlive)
+            if (this.PlayerService.player2.player.ships[i].ship.isAlive)
                 break;
             //Если дошли до последнего корабля
             if (i == this.PlayerService.player2.player.ships.length - 1) {

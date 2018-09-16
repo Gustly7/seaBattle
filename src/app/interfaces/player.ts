@@ -4,7 +4,7 @@ import {field} from "../components/field/field";
 export interface Player {
     ships: ship[];
     field: field;
-
     isComp: boolean;
     isEnemy: boolean;
+    selectedShip: ship;
 }

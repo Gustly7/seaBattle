@@ -1,27 +1,15 @@
 <div class="row">
-    <div class="col-lg-12">
-        &nbsp;
-    </div>
-</div>
-<div class="row">
     <div class="col-lg-11">
         <field [width]="this.GameService.getFieldSize() + 1" [height]="this.GameService.getFieldSize() + 1"
-               [player]="player" [selectedShip]="selectedShip"
+               [player]="player"
                (fieldCellClickOut)="playerFieldCellClick($event)"></field>
     </div>
     <!--Селект лист с кораблями для игрока для ручной расстановки-->
-    <shipsList [player]="player"></shipsList>
-    <button type="button" (click)="this.ShipsService.placeShipsRandom(player.ships)">Random</button>
+    <shipsList [player]="player" [dispCond]="!player.isEnemy && !this.GameService.isStarted"></shipsList>
     <!--Селект лист с кораблями после начала игры-->
-    <div class="col-lg-1" *ngIf="this.GameService.isStarted">
-        <select size="10" disabled>
-            <ng-container *ngFor="let vShip of ships">
-                <option *ngIf="vShip.isAlive">{{vShip.name}}</option>
-            </ng-container>
-        </select>
-    </div>
+    <shipsList [player]="player" [dispCond]="this.GameService.isStarted"></shipsList>
     <!--Селект лист со сложностями для копьютера-->
-    <div class="col-lg-1" *ngIf="isComp&&isEnemy">
+    <div class="col-lg-1" *ngIf="player.isComp && player.isEnemy">
         <select size="1" [(ngModel)]="selectedDifficulty">
             <ng-container *ngFor="let vDiff of difficulties">
                 <!--Вот тут не понял как правильно опцию сделать, было value={{vDiff.id}}, но не работало

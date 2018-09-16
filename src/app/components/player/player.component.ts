@@ -1,7 +1,6 @@
 import {ShipsService} from "../../services/ships.service";
 import {GameService} from "../../services/game.service";
 import {Component, Input, OnInit} from '@angular/core';
-import {ship} from "../ship/ship";
 import {cell} from "../cell/cell";
 import {coordinate} from "../../classes/coordinate";
 import {CompLogicService} from "../../services/comp-logic.service";
@@ -18,12 +17,12 @@ export class PlayerComponent implements OnInit {
 
     @Input() player: Player;
     //ships: ship[] = []; //Массив кораблей
-    selectedShip: ship; //Выбранный корабль из селект листа для ручной расстановки
+    //selectedShip: ship; //Выбранный корабль из селект листа для ручной расстановки
     //@Input() isComp: boolean = false; //Флаг что игрок - комрьютер
     //@Input() isEnemy: boolean = false;//Флаг что игрок - враг
 
     difficulties: object[] = this.GameService.getDifficulties(); //Массив сложностей для селект листа для копьютера
-    selectedDifficulty: number = this.GameService.settings.difficulty; //Выбранная сложность, используется в CompLogicService для расчета координаты выстрела компьютера
+    selectedDifficulty: string = this.GameService.settings.difficulty; //Выбранная сложность, используется в CompLogicService для расчета координаты выстрела компьютера
 
     constructor(private GameService: GameService, private ShipsService: ShipsService, private CompLogicService: CompLogicService, private PlayerService: PlayerService, private FieldService: FieldService) {
     }
@@ -71,37 +70,10 @@ export class PlayerComponent implements OnInit {
         //По клик по своему полю, то ставим корабль, если игра еще не началась.
         else {
             if (!this.GameService.gameStarted()) {
-                this.placeShip(pCell);
+                this.ShipsService.placeShip(this.player, pCell);
             }
         }
     }
 
-    placeShip(pCell: cell) {
-
-        //Если в селект листе ничего не выбрано, ругаемся
-        if (this.selectedShip == undefined) {
-            alert('Выберите корабль');
-            return false;
-        }
-        //Присваиваем выбранному кораблю стартовые X и Y
-        let oldX = this.selectedShip.x;
-        let oldY = this.selectedShip.y;
-        this.selectedShip.x = pCell.x;
-        this.selectedShip.y = pCell.y;
-        this.selectedShip.rearrangeParts();
-        if (this.ShipsService.checkCollision(this.player.ships, this.selectedShip)) {
-            this.selectedShip.x = oldX;
-            this.selectedShip.y = oldY;
-            this.selectedShip.rearrangeParts();
-            alert('Коллизия');
-            return false;
-        }
-        //Перераспределяем палубы
-    }
-
-    //Метод рандомной расстановки кораблей
-    placeShipRandom() {
-        this.ShipsService.placeShipsRandom(this.player.ships);
-    }
 
 }

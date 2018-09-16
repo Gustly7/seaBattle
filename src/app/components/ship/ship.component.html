@@ -1,3 +1,3 @@
-<div *ngIf="x>-1">
-    <shipPart *ngFor="let vShipPart of parts" [x]="vShipPart.x" [y]="vShipPart.y" [ship]="this"></shipPart>
+<div *ngIf="ship.x>-1">
+    <shipPart *ngFor="let vShipPart of ship.parts" [x]="vShipPart.x" [y]="vShipPart.y" [ship]="this"></shipPart>
 </div>

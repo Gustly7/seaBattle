@@ -22,16 +22,10 @@ export class shipPart {
     @Input() y: number;
     @Input() ship: ship;
 
-    //constructor(private host: ElementRef, private renderer: Renderer2) {
     constructor() {
-        //this.x = x2;
-        //this.y = y2;
-        //console.log('PartCreated');
     }
 
     ngOnInit() {
-        //console.log(this);
-        //this.renderer.setStyle(this.host.nativeElement.children[0], 'left', (this.x*40)+'px');
-        //this.renderer.setStyle(this.host.nativeElement.children[0], 'top', (this.y*40)+'px');
+
     }
 }

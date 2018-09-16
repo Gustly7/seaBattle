@@ -7,4 +7,5 @@ export class HumanPlayer implements Player{
     field: field;
     isComp: boolean = false;
     isEnemy: boolean = false;
+    selectedShip: ship;
 }

@@ -5,8 +5,8 @@
               [isShip]="vCell.isShip" [isShot]="vCell.isShot" (cellClickOut)="fieldCellClick($event)"></cell>
     </div>
     <ng-container *ngIf="!player.isEnemy">
-        <ship *ngFor="let ship of player.ships" [x]="ship.x" [y]="ship.y" [parts]="ship.parts"
-              (dblclick)=shipDblClk(ship) [HP]="ship.HP"></ship>
+        <ship *ngFor="let ship of player.ships" [ship]="ship.ship"
+              (dblclick)=shipDblClk(ship)></ship>
     </ng-container>
     <button (click)="qwe()"></button>
 </div>

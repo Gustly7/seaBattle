@@ -16,7 +16,6 @@ export class field {
     @Input() height: number;
     field: cell[][] = [[]];
     @Output() fieldCellClickOut = new EventEmitter<cell>();
-    @Input() selectedShip: ship;
     @Input() player: Player;
 
     constructor(private GameService: GameService, private ShipsService: ShipsService, private FieldService: FieldService) {
@@ -57,22 +56,6 @@ export class field {
         this.field.shift();
     }
 
-    //Метод добавления корабля в массив
-    addShip(x: number, y: number) {
-        let lShip = new ship();
-        //Можно ли задать x и y в конструктуре?
-        lShip.x = x;
-        lShip.y = y;
-        lShip.shipSize = 2;
-        lShip.fillParts();
-        if (this.ShipsService.checkCollision(this.player.ships, lShip)) {
-            alert('Коллизия');
-            return false;
-        }
-        this.player.ships.push(lShip);
-        //console.log(this.ships);
-    }
-
     //Клик по ячейке поля, эммитим наверх.
     fieldCellClick(pCell: cell) {
         //console.log('fieldCellClick');
@@ -85,17 +68,15 @@ export class field {
         if (this.GameService.gameStarted()){
             return false;
         }
-
-        //selectedShip не пробасывается наверх как ships, почему?
-        this.selectedShip = pShip;
-        pShip.kx = pShip.kx == 0 ? 1 : 0;
-        pShip.ky = pShip.kx == 0 ? 1 : 0;
-        pShip.rearrangeParts();
-        if (this.ShipsService.checkCollision(this.player.ships, pShip)) {
+        this.player.selectedShip = pShip;
+        pShip.ship.kx = pShip.ship.kx == 0 ? 1 : 0;
+        pShip.ship.ky = pShip.ship.kx == 0 ? 1 : 0;
+        pShip.ship.rearrangeParts();
+        if (this.ShipsService.checkCollision(this.player.ships, pShip.ship)) {
             alert('коллизия');
-            pShip.kx = pShip.kx == 0 ? 1 : 0;
-            pShip.ky = pShip.kx == 0 ? 1 : 0;
-            pShip.rearrangeParts();
+            pShip.ship.kx = pShip.ship.kx == 0 ? 1 : 0;
+            pShip.ship.ky = pShip.ship.kx == 0 ? 1 : 0;
+            pShip.ship.rearrangeParts();
         }
     }
 
@@ -106,10 +87,10 @@ export class field {
 
             let lShip = this.player.ships[s];
             //Пропускаем корабли которые не поставили
-            if (lShip.x == -999)
+            if (lShip.ship.x == -999)
                 continue;
-            for (let p in lShip.parts) {
-                let lPart = this.player.ships[s].parts[p];
+            for (let p in lShip.ship.parts) {
+                let lPart = this.player.ships[s].ship.parts[p];
                 let lCell = this.field[lPart.y][lPart.x];
                 //Кладем в ячейку флаг что это корабль
                 lCell.isShip = true;
